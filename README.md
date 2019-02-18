@@ -1,2 +1,2 @@
 # guess-x
-Applikacja google assistant 
+applikacja google assistant 
