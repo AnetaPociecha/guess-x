@@ -1,9 +1,9 @@
 import { DATABASE_SUBSCRIBERS_REF_NAME } from './config/constants'
-import { Subscriber } from './subscriber';
+import { SubscriberGateway } from './subscriberGateway';
 
 interface ISubscriberFinder {
-    addSubscriber(userId: string): void
-    findSubscribers(): Promise<Subscriber[]>
+    findAll(): Promise<SubscriberGateway[]>
+    find(convId: string): Promise<SubscriberGateway>
 }
 
 export class SubsciberFinder implements ISubscriberFinder {
@@ -12,31 +12,25 @@ export class SubsciberFinder implements ISubscriberFinder {
         this._database = database
     }
 
-    addSubscriber(userId: string): void {
-        const newSubscriberKey: string = this.getNewSubscriberKey()
-        const updates: object = this.getUpdateData(newSubscriberKey, userId);
-        this._database.ref().update(updates);
-    }
-
-    async findSubscribers(): Promise<Subscriber[]> {
-        const subscribers: Subscriber[] = []
-        const snapshot: any = await this._database.ref(DATABASE_SUBSCRIBERS_REF_NAME).once('value')
+    async findAll(): Promise<SubscriberGateway[]> {
+        const subscribers: SubscriberGateway[] = []
+        const snapshot: any = await this._database.ref(
+            DATABASE_SUBSCRIBERS_REF_NAME).once('value')
+            
         snapshot && snapshot.forEach(child => {
-            const id: string = child.val()
-            subscribers.push(new Subscriber(id))
+            const convId: string = child.key
+            const notifId: string = child.val()
+            subscribers.push(new SubscriberGateway(convId, notifId, this._database))
         });
         return subscribers
     }
 
-    private getNewSubscriberKey(): string {
-        const key: string = this._database.ref().child(DATABASE_SUBSCRIBERS_REF_NAME).push().key
-        return key
+    find(convId: string): Promise<SubscriberGateway> {
+        const refName: string = DATABASE_SUBSCRIBERS_REF_NAME + '/' + convId
+        return this._database.ref(refName).once('value')
     }
-
-    private getUpdateData(key: string, value: string): object {
-        const updates: object = {};
-        const name: string = '/' + DATABASE_SUBSCRIBERS_REF_NAME + '/' + key 
-        updates[name] = value
-        return updates
+    
+    get database() {
+        return this._database
     }
 }

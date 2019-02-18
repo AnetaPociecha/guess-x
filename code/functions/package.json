@@ -6,10 +6,16 @@
     "firebase-admin": "~7.0.0",
     "firebase-functions": "^2.2.0",
     "googleapis": "^37.2.0",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "sinon": "^7.2.3"
   },
   "devDependencies": {
+    "@types/chai": "^4.1.7",
     "@types/express": "^4.0.37",
+    "@types/mocha": "^5.2.6",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "ts-node": "^8.0.2",
     "tslint": "^5.8.0",
     "typescript": "^3.3.3"
   },
@@ -20,7 +26,8 @@
     "shell": "npm run build && firebase experimental:functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "test": "mocha -r ts-node/register src/test/**/*.spec.ts"
   },
   "engines": {
     "node": "8"
