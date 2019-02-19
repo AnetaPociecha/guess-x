@@ -71,6 +71,7 @@ export const sendNotifications = functions.database.ref(DATABASE_X_REF_NAME)
     .onWrite((change, context) => {
         const currentX: number = change.after.val();
         notificationManager.sendNotification(currentX)
+        return true
     });
 
 

@@ -6,9 +6,9 @@ import { LOCALE } from './config/constants'
 import { SubscriberGateway } from "./subscriberGateway";
 
 interface INotificationManager {
-    sendNotification(currentX: number): Promise<any>
-    addSubscriber(convId: string, notifId: string): Promise<any>
-    deleteSubscriber(convId: string): Promise<any>
+    sendNotification(currentX: number)
+    addSubscriber(convId: string, notifId: string)
+    deleteSubscriber(convId: string)
 }
 
 export class NotificationManager implements INotificationManager {

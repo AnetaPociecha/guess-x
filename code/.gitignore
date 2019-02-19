@@ -38,6 +38,7 @@ node_modules/
 ## ignore generated JavaScript files
 functions/**/*.js
 functions/**/*.js.map
+functions/**/serviceAccountKey.json
 
 # Typescript v1 declaration files
 typings/
